@@ -1,0 +1,16 @@
+{
+  "name": "class-olympics",
+  "version": "0.1.0",
+  "description": "Class tutorial on fullstack development.",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server",
+    "start": "node server.js"
+  },
+  "author": "John Word",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}
