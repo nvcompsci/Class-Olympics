@@ -1,0 +1,14 @@
+div.post {
+    border: 1px solid black;
+    width: 50%;
+    margin: 10px auto;
+}
+div.details {
+    background-color: darkgrey;
+    color: white;
+}
+div.details div {
+    display: inline;
+    width: 30%;
+    border: 1px solid black;
+}
