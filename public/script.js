@@ -27,6 +27,17 @@ function login(e) {
             user_id = res.userId
         })
         .catch(error => console.error(error))
+
+    //1. get event registration from server
+    //1.1 pull student id from text box (username)
+    const input_user_id = 
+    fetch(`/login/${input_user_id}`)
+        .then(res => res.json())
+        .then(res => {
+            //1.2 show event info on page
+            
+        })
+        .catch(error => console.error(error))
 }
 
 function spawnEvents() {

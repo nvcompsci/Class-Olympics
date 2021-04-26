@@ -26,6 +26,20 @@ ON events.id = teachers.event_id;`
     })
 })
 
+app.get("/register/:userId", (req,res) => {
+    const {userId} = req.params
+    const sql = `SELECT * FROM events
+    INNER JOIN registrations ON events.id = registrations.event_id
+    WHERE registrations.student_id = ?;`
+    db.get(sql,[userId],(err,row) => {
+        console.log(row)
+        const payload = {
+            event: row
+        }
+        res.send(payload)
+    })
+})
+
 app.post("/register", (req,res)=> {
     const reg = req.body;
 
