@@ -6,7 +6,7 @@ document.getElementById("login")
 
 spawnEvents()
 //2.2 Define function createPost to send post to server
-let user_id
+let user_id = 1;
 
 
 function login(e) {
@@ -29,41 +29,43 @@ function login(e) {
         .catch(error => console.error(error))
 }
 
-function spawnUsers() {
+function spawnEvents() {
     //GET posts from server
-    fetch("/users")
+    fetch("/events")
      .then(res => res.json())
-     .then(users => {
-         const usersHTML = users.map( user => `
-         <div class="user" data-userid=${user.id}>
-             <p>${user.username}</p>
+     .then(events => {
+         const eventsHTML = events.map( event => `
+         <div class="event" data-eventid=${event.id}>
+             <p>${event.title}</p>
              <div class="details">
-                 <div>${user.firstName}</div>
+                 <div>${event.teacher}</div>
+                 <div>${event.location}</div>
+                 <div>${event.capacity}</div>
              </div>
-             <button onclick="e => {addFriend(e);}">Add Friend</button>
+             <button onclick="e => {signUp(e);}">Sign Up!</button>
          </div>
          ` ).join("")
-         $usersContainer.innerHTML = usersHTML
+         $eventsContainer.innerHTML = eventsHTML
      })
      .catch(err => console.error(err))
     
  }
 
-function addFriend(e) {
-    const $userDiv = e.target.parentElement
-    const friend_id = $userDiv.userid
+function signUp(e) {
+    const $eventDiv = e.target.parentElement
+    const event_id = $eventDiv.eventid
 
     const payload = {
         body: JSON.stringify({
             user_id: user_id,
-            friend_id: friend_id
+            event_id: event_id
         }),
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         }
     }
-    fetch("/friends", payload)
+    fetch("/register", payload)
         .then(res => res.json())
         .then(res => console.log(res.body))
         .catch(error => console.error(error))

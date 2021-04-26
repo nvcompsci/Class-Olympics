@@ -1,7 +1,7 @@
 const express = require('express')
 const sqlite3 = require('sqlite3')
 const app = new express()
-const db = new sqlite3.Database('./db/social.db')
+const db = new sqlite3.Database('./db/classolympics.db')
 
 
 //serve client side files
@@ -9,32 +9,34 @@ app.use(express.static('public'))
 app.use(express.json())
 
 app.get("/events", (req,res) => {
-    const sql = "SELECT * FROM events;"
+    console.log("GET on /events",req.ip)
+    const sql = `SELECT id,
+    title,
+    location,
+    capacity,
+    teachers.first_name,
+    teachers.last_name
+FROM events
+LEFT JOIN teachers
+ON events.id = teachers.event_id;`
+    
     db.all(sql,[],(err, rows) => {
+        console.log(rows)
         res.send(rows)
     })
 })
 
-//3.2 define request handler for POST on /posts
-app.post("/posts", (req,res)=> {
-    const post = req.body;
-    //3.2.1. verify the post is at least 5 characters long
-    if (post.text.length >= 5) {
-        //3.2.2. add to posts array if valid
-        const sql = "INSERT INTO posts (content, user_id) VALUES (?,?);"
-        db.run(sql,[post.text,post.user_id])
-        //3.2.3. send response 'New post successfully saved.'
+app.post("/register", (req,res)=> {
+    const reg = req.body;
+
+
+        const sql = "INSERT INTO registrations (event_id, student_id) VALUES (?,?);"
+        db.run(sql,[reg.event_id,reg.user_id])
+
         res.send({
             message: "Post successfully saved"
         })
-    }
-    //3.2.4. if invalid send error response
-    else {
-        res.status(401)
-        res.send({
-            message: "Post is not long enough."
-        })
-    }
+   
 })
 
 app.post("/login", (req, res) => {
