@@ -10,7 +10,7 @@ app.use(express.json())
 
 app.get("/events", (req,res) => {
     console.log("GET on /events",req.ip)
-    const sql = `SELECT id,
+    const sql = `SELECT events.id,
     title,
     location,
     capacity,
@@ -21,7 +21,11 @@ LEFT JOIN teachers
 ON events.id = teachers.event_id;`
     
     db.all(sql,[],(err, rows) => {
+        if(err) console.error(err)
         console.log(rows)
+        const payload = {
+            rows
+        }
         res.send(rows)
     })
 })
@@ -42,14 +46,26 @@ app.get("/register/:userId", (req,res) => {
 
 app.post("/register", (req,res)=> {
     const reg = req.body;
+    console.log(reg)
 
-
-        const sql = "INSERT INTO registrations (event_id, student_id) VALUES (?,?);"
-        db.run(sql,[reg.event_id,reg.user_id])
-
-        res.send({
-            message: "Post successfully saved"
+        const sql = 
+        "INSERT INTO registrations (event_id, student_id) VALUES (?,?);"
+        db.run(sql,[reg.event_id,reg.user_id],(err) => {
+            if (err) {
+                console.error(err)
+                res.status(403)
+                res.send({
+                    message: "Error registering"
+                })
+            }
+            else {
+                res.send({
+                    message: "Post successfully saved"
+                })
+            }
         })
+
+        
    
 })
 
